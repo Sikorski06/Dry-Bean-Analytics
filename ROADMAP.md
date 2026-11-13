@@ -1,116 +1,147 @@
 # Dry-Bean-Analytics — Learning and Development Roadmap
 
+**Audit checkpoint:** 2026-11-13  
+**Sources checked:** `PRiAD 0`, `PRiAD 1`, `PRiAD 2`, `PRiAD 3`, `PRiAD_kolos`, `01_data_exploration(1).ipynb`, `02_data_cleaning.ipynb`, and previous `ROADMAP.md`.  
+**Next exercise:** Exercise 9 — feature-distribution visualization in `notebooks/03_visual_exploration.ipynb`.
+
 ## Working agreement
 
-1. Keep completed work intact; prefer small corrections and new cells rather than rewriting notebooks.
-2. Student writes analytical code first; assistant provides theory, hints, review and specific corrections. Codex may review/debug, not replace learning.
-3. Write notebook explanations in English. Assistant supplies **raw Markdown inside fenced `md` blocks**, directly pasteable into Jupyter Markdown cells. Explain purpose before code and evidence-based findings after code.
-4. Use Pandas for labeled tabular analysis, NumPy for arrays/vectorization/numerical computations, Seaborn/Matplotlib for visual analysis. Cover the full breadth of course topics, not just what is convenient for the main dataset.
-5. After each section: assess correctness, interpret findings, ask conceptual questions, run notebook top-to-bottom, and commit a meaningful Git change. Preserve raw data and document data provenance.
+1. Preserve finished analytical work. Apply small fixes to incorrect cells; add new cells/notebooks for new topics.
+2. Student writes analytical code first; the assistant provides theory, focused hints, code review, statistical interpretation, and colloquium-style questions. Codex can debug or review, not write practice solutions.
+3. Use **English Markdown cells** before each analysis (objective/method) and after it (verified findings/limitations). Provide Markdown as raw fenced `md` text.
+4. Prioritize PRiAD colloquium tasks **and** complete syllabus coverage across PRiAD 0–3. Use Pandas for labeled data, NumPy for arrays, Matplotlib/Seaborn for graphics.
+5. Run every notebook top-to-bottom in a fresh kernel before committing. Keep data provenance documented and meaningful Git commits.
 
-## Verified progress from uploaded notebook
+## Verified progress from latest uploads
 
-File: `notebooks/01_data_exploration.ipynb` (uploaded copy named `01_data_exploration.ipynb`).
+### `01_data_exploration(1).ipynb` — main data exploration
 
-- [x] Introduction and dataset loading with `pandas`, `numpy`, `pathlib.Path`, `pd.read_excel`.
-- [x] Shape, `select_dtypes`, column types and unique `Class` values.
-- [x] Class counts and percentages; missing values per column (`df.isna().sum()`).
-- [x] `loc`/`iloc`, basic filtering, median threshold, sorting and `groupby`.
-- [x] Classwise Area mean/median and Perimeter min/max/std; Area five-measure aggregation using `agg`.
-- [ ] Section 6: descriptive statistics: the heading exists but no implementation yet.
-- [ ] Complete analytical interpretations of current tabular results; presently mostly short headings.
+- [x] Read Excel using Pandas and `Path`; examine shape, dtypes, column names, class frequencies and null values.
+- [x] Use `loc`, `iloc`, filtering, sorting, `groupby` and `agg`.
+- [x] Compute Area/Perimeter class summaries; mean, median, variance, standard deviation, quartiles, IQR, coefficient of variation, and ranking comparisons.
+- [x] Compare selected NumPy and Pandas statistics, including sample standard deviation with `ddof=1`.
+- [x] Use `to_numpy`, `shape`, `ndim`, `size`, `dtype`, Boolean masks, standardization, `np.where`, `column_stack` and `reshape`.
+- [ ] Fix `iloc[:9]` when ten rows were intended; fix `rename(columns={'Area':'Min'})` on the Perimeter table (actual column is `Perimeter`).
+- [ ] Add clear numeric interpretations/Markdown conclusions to the current notebook; use `display()` when multiple outputs should be visible.
+- [ ] Deeper NumPy practice: creating arrays with `arange/linspace/logspace/zeros/ones`, indexing/axes, `dot`, `diag`, cumulative operations, `concatenate/hstack/vstack`, `save/load/loadtxt/savetxt`, and views vs copies (can be done later).
 
-**Data observed:** 13,611 rows; 16 numerical inputs; 7 classes; no missing values in the uploaded notebook output.
+### `02_data_cleaning.ipynb` — missing-value handling
 
-**Minor follow-up review items (do not redo whole section):** `df.iloc[:9]` selects 9 rows rather than 10; in Perimeter summary, `rename(columns={"Area": "Min"})` does not rename the current `Perimeter` column; `rename(..., inplace=True)` triggers a deprecation warning in the user's environment. Consecutive Jupyter expressions ordinarily show only the last display unless `display()` or `print()` is used.
+- [x] Inject reproducible ~5% cell-level missingness into numeric features only (`default_rng(42)`).
+- [x] Count missing cells and incomplete rows; compute per-column missing percentages.
+- [x] `dropna`, global mean imputation, global median imputation, class-specific median imputation.
+- [x] Compare observation retention, Area mean/median/std/CV and changes, and class distribution TVD.
+- [x] Actual saved outputs: **10,828** missing cells; **7,558** rows with any missing feature; **6,053** complete rows remain (**44.4714%**); deletion TVD **0.0072**.
+- [ ] Correct Markdown interpretations: class-median imputation has smallest *absolute Area mean change among the cleaning methods* (**+0.0256%**), not global median imputation (**−0.8353%**); class-median also has smallest absolute Area std change among the cleaning methods (**−0.0713%**). The corrupted dataset is a reference condition, not a cleaning strategy.
+- [ ] Update wording: class composition changed **slightly** after deletion (TVD **0.0072**), not exactly zero; replace bracketed placeholders and `table .` with precise values.
+- [ ] Correct erroneous comment that `.loc` cannot edit DataFrames: assignment via `.loc[...] = ...` is supported.
+- [ ] Add explicit check that imputed datasets have zero missing values; compare `Perimeter` and `Eccentricity` in addition to `Area` (helpful for stronger conclusions).
+- [ ] Implement the exact PRiAD 2 exercise: a reusable function returning two missing-count vectors/dictionaries (one per row, one per column). Do this as a short follow-up, not a full rewrite.
+- [ ] Restart kernel, **Run All**, confirm no failures, and commit.
 
-## Phase A — Main research narrative
+## Syllabus coverage audit
 
-### M1. Dataset understanding and manipulation — CURRENT, finishing
-- Cover Series/DataFrame, shapes/dtypes, indexing, boolean filtering, sorting, `groupby` and `agg`.
-- Complete existing Markdown commentary with verified insights.
-- Tiny corrections to `iloc` and Perimeter heading.
-- No new standalone notebook required.
+Notation: **Covered** = present in submitted project code; **Partial** = some practice but identifiable gaps; **Open** = not implemented in submitted project notebooks.
 
-### M2. Descriptive statistics + NumPy — NEXT
-- Continue in existing notebook Section 6.
-- Mean, median, mode, range, variance, sample vs population std (`ddof`), Q1/Q3, IQR, percentiles and coefficient of variation.
-- Global vs per-class summaries; statistics with `groupby` and `agg`.
-- **Add NumPy explicitly:** `Series.to_numpy()`, `ndarray`, `shape`, `ndim`, `dtype`, indexing/masks, `np.mean`, `np.median`, `np.var`, `np.std`, `np.percentile`, `np.quantile`, `np.isnan`, `np.nanmean`; explain NaN behavior, `ddof=0/1` and axis.
-- Practice vectorization, broadcasting, `reshape`, `concatenate`, `copy` versus view and basic matrix operations in supplementary array tasks based on actual bean features (not necessarily all in the main research notebook).
-- First exercises already assigned: global Area mean/median/variance/std; quartiles/IQR; per-class CV; grouped table including IQR; compare std vs CV rankings; add Pandas vs NumPy comparison.
+| Course source | Covered | Partial / still to practice | Planned location |
+|---|---|---|---|
+| **PRiAD 0: Python foundations** | Imports, functions/lambda as a Pandas aggregator, loops/dictionaries; user already knows fundamentals | Conditional logic, `try/except`, standalone functions: quick refresher only if needed | Throughout |
+| **PRiAD 0: NumPy** | Arrays from DataFrames, dtype/shape, masking, vectorized arithmetic, z-score, `where`, stacking, reshaping, `mean/std/var/quantile` | Array creation (`zeros`, `ones`, `arange`, `linspace`, `logspace`), `np.dot`, matrices, cumulative operations, array IO, `np.concatenate`, copies/views | Supplementary `numpy_experiments.ipynb` and feature analysis |
+| **PRiAD 1: Series/DataFrames** | Read Excel, column access, DataFrame inspection, loc/iloc, filtering/sorting, grouping | Standalone `Series`, explicit indexing/reindexing, `pd.Categorical`, `describe`, other source formats | Small focused cells + supplementary |
+| **PRiAD 1: joining and time series** | Some `groupby`, per-class analyses | `concat`, `merge`, dates/date index, resampling, `shift`, yearly change, `idxmin/idxmax`, CSV/Excel import variants | `time_series.ipynb` |
+| **PRiAD 1: raster/image** | No direct image exercises yet | `skimage.io.imread`, grayscale, RGB, HSV/YUV, channel separation, pixel arrays | `image_analysis.ipynb` |
+| **PRiAD 2: missing values** | Detection, deletion, global and group imputation, comparison | Missing-count **function**, multi-feature evaluation, `isnull/notnull` equivalences | Finish `02_data_cleaning.ipynb` in small patches |
+| **PRiAD 2: univariate statistics** | Mean, median, variance, std, quartiles, IQR, CV, class summaries | Mode/range/`describe`, robustness to skew/outliers, interpret means on different distribution shapes | Finish when creating visualizations |
+| **PRiAD 2: dependence** | Not implemented | Covariance and correlation, global vs per-class, feature comparisons, scatterplots and heatmaps | `04_feature_relationships.ipynb` |
+| **PRiAD 2: text** | Not implemented | Per-book/section word counts, text lengths, descriptive statistics | `text_analysis.ipynb` |
+| **PRiAD 3: basic charts** | Not implemented | Line, grouped/stacked bar, horizontal bar, sorting before plotting, `cumsum` | `03_visual_exploration.ipynb` + `time_series.ipynb` |
+| **PRiAD 3: univariate charts** | Not implemented | Histograms, bin selection, KDE, comparing class distributions, box/violin/swarm | **Next: `03_visual_exploration.ipynb`** |
+| **PRiAD 3: multivariate charts** | Not implemented | Scatter and pair plots (with `hue`), class overlap, interpretable feature pairs | `04_feature_relationships.ipynb` |
+| **PRiAD 3: advanced examples** | Not implemented | Reusable plot + per-class-statistics function for arbitrary numeric DataFrame; image histogram; Anscombe's quartet | Visual notebook + image notebook |
 
-### M3. Data quality and missing values — PRiAD 2 + colloquium task 1
-- Original bean dataset is complete, so create a separate **reproducible corrupted copy** using a fixed random seed; never overwrite raw data.
-- Count missing cells, per column and per row; classes, class frequencies, feature count, observation count; `isna`, `notna`, `dropna`, `fillna` and implications of different approaches.
-- Write missing-count utility returning per-row and per-column counts, echoing PRiAD 2 exercise.
-- Examine before/after distributions and class retention.
+The course notebooks contain further **specific dataset exercises** (`iris`, `dane1`–`dane11`, currencies, passenger counts, `mtcars`, text, images). We will practice representative exercises or their equivalent while retaining the distinction between core statistical methods and dataset-specific examples. If preparing for exact lab tasks, use the source datasets when available.
 
-### M4. Univariate data visualization — PRiAD 3 + colloquium task 2
-- Line/bar/horizontal bar, histograms (`bins`, overlaid groups, KDE), class-specific distribution comparisons, box/violin/swarm plots.
-- Match graph to question; distinguish spread, skewness, outliers and class overlap.
-- Write reusable visualization/summary function for arbitrary numeric feature(s) and class column (PRiAD 3 exercise).
-- Explain why feature with high variance is not automatically a strong class discriminator.
+## Colloquium coverage (`PRiAD_kolos` — 15 points)
 
-### M5. Relationships and multivariate EDA — PRiAD 2/3 + colloquium task 3
-- Covariance versus Pearson correlation (including signs and scale); `corr`, `cov`, `np.corrcoef`, `np.cov`, heatmaps and scatter/pair plots.
-- Compare overall and within-class relationships, assess which feature distributions best separate classes.
-- Demonstrate Anscombe's quartet: similar summary statistics can conceal different patterns.
+- **Task 1 — 3 points:** observation/class/feature counts, per-class sizes, missing values, drop incomplete records — **covered as individual operations**, but needs an independent timed simulation and a reusable missing-count function.
+- **Task 2 — 4 points:** compare variability globally and within classes with appropriate plots and written interpretation — **numerical part covered; graphical interpretation open**.
+- **Task 3 — 4 points:** inter-feature correlation and features separating classes, with plots — **open**.
+- **Task 4 — 4 points:** redundant features based both on mutual similarity and class separability — **open**.
 
-### M6. Feature redundancy and discriminative power — colloquium task 4
-- Identify correlated/near-duplicate feature pairs and evaluate within- vs between-class separation.
-- Candidate methods: classwise descriptive statistics/plots and interpretable numerical comparisons; treat feature importance methods beyond PRiAD as optional and clearly label them.
-- Do not equate high feature-feature correlation with irrelevance or feature-target correlation with categorical separability.
-- State reasoned removal/retention proposals with caveats.
+## Roadmap, ordered by next learning value
 
-## Phase B — Full PRiAD material (supplementary notebooks, topic-first)
+### M1 — Data exploration and manipulation — MAIN CODE COMPLETE, DOC REVIEW PENDING
 
-### M7. Time series + combining tables — PRiAD 1 and 3
-- Another suitable dataset: historical currency exchange rates, or source files if available.
-- `concat`, `merge`, date parsing/index, resampling, `shift`, rolling/yearly/monthly summaries and line/bar charts; discuss aggregation over time.
-- Keep supplementary notebooks separate from Dry Bean's central research story.
+Keep original analysis; fix two indexing/column-name issues and add evidence-based Markdown findings.
 
-### M8. Text analysis — PRiAD 2
-- Use a lawful, suitable literary text and reproduce exercises on counting words/characters, summary statistics and per-chapter comparisons.
+### M2 — Descriptive statistics and NumPy — CORE COMPLETE, SUPPLEMENT PENDING
 
-### M9. Image/raster + deeper NumPy — PRiAD 1 and 3
-- `scikit-image` loading, pixel arrays, RGB and alternative color spaces (HSV, YUV), channel slicing and color/grayscale histograms.
-- NumPy shape/axes/slicing/masks/copying applied to images.
+Core measures and NumPy array operations implemented. Future: mode/range/`describe`, matrix operations and copying/view semantics.
 
-### M10. Colloquium simulations and review — PRiAD_kolos
-- Task 1 (3 pts): observations, number of classes, per-class sizes, feature count, missing count, clean copy.
-- Task 2 (4 pts): feature variability overall and by class, and appropriate visualizations.
-- Task 3 (4 pts): feature correlations and which attributes distinguish classes, with graphics.
-- Task 4 (4 pts): identify redundant features with numerical evidence AND class separability analysis.
-- Practice on original simulated `make_classification` data and one unseen dataset; do not copy old answers.
-- Check whether the previous-year notebook's wording about data prior to missing-value corruption is internally consistent; validate the actual dataset used for each task.
+### M3 — Data cleaning — IMPLEMENTED, FINAL QA PENDING
 
-## Suggested repository evolution (not all at once)
+Complete missing-count function, verify imputed null counts, correct narrative conclusions; optional two-feature comparison, then Run All + commit.
+
+### M4 — Statistical visualization — **NEXT**
+
+Create `notebooks/03_visual_exploration.ipynb`. Learn Matplotlib/Seaborn and compare `Area`, `Perimeter`, `Eccentricity` overall and by class with histograms, KDE, boxplots and violin plots. Include `bins` experiments; interpret spread, overlap, outliers, imbalance. Then line/bar/stacked/barh and a generic feature/class plotter. Directly addresses colloquium Task 2.
+
+### M5 — Correlation and multivariate relationships
+
+Use covariance, Pearson coefficients, `corr`, `cov`, `np.corrcoef`, `np.cov`, heatmaps, scatter/pair plots and Anscombe quartet. Identify candidate class-separating features. Directly addresses Task 3.
+
+### M6 — Redundant and discriminating features
+
+Evaluate high feature-feature correlation, feature-specific class separation and evidence for dropping/retaining attributes; distinguish correlation from usefulness. Directly addresses Task 4.
+
+### M7 — Time series and combining tables
+
+Use currency/market or passenger dataset; `merge/concat`, dates, `resample`, `shift`, growth in absolute/relative terms; temporal line/bar charts. Cover PRiAD 1 and 2 examples.
+
+### M8 — Text analysis
+
+Analyze a legally reusable full text or supplied text; per-section word/character distributions and descriptive statistics.
+
+### M9 — Image processing and deeper NumPy
+
+Pixel array manipulation, color space conversion and histograms. Complete array creation, concatenation, matrix algebra, file IO and copy/view exercises that don't fit the research narrative.
+
+### M10 — Timed colloquium simulation
+
+Independently solve all four original task types on a fresh dataset produced with `make_classification`, including answers in Markdown. Review performance and weaknesses, then redo on an unseen dataset. No reliance on previous solutions.
+
+## Exercise 9 — next practical assignment
+
+**Notebook:** `notebooks/03_visual_exploration.ipynb`
+
+1. Write an introduction explaining the research question: *Which morphological attributes help distinguish dry-bean varieties?*
+2. Use the original complete `df`, **not** the artificially corrupted dataset, for initial plots.
+3. Draw an overall histogram of `Area` using at least **three bin counts**; explain what changes when `bins` changes.
+4. Compare Area distributions **between classes** (histograms and/or KDE) with a legend; note that raw counts can be affected by class imbalance.
+5. Create **boxplots** and **violin plots** for `Area` by `Class` and interpret medians, IQR, spread, potential outliers and overlap.
+6. Repeat one distribution comparison for **Perimeter** and **Eccentricity**; discuss which seems more discriminative and why.
+7. Add concise Markdown conclusions supported by the plots, not just code execution.
+
+**Help available when coding:** `matplotlib.pyplot`, `seaborn.histplot`, `seaborn.boxplot`, `seaborn.violinplot`; learn parameters `x`, `hue`, `bins`, `stat`, `common_norm`, and appropriate figure sizing. Student attempts implementation first; assistant reviews.
+
+## Git workflow and repository layout
 
 ```text
 Dry-Bean-Analytics/
-├── data/
-│   ├── raw/
-│   └── processed/
+├── data/{raw,processed}/
 ├── notebooks/
 │   ├── 01_data_exploration.ipynb
-│   ├── 02_data_quality.ipynb
-│   ├── 03_visual_exploration.ipynb
+│   ├── 02_data_cleaning.ipynb
+│   ├── 03_visual_exploration.ipynb   # NEXT
 │   ├── 04_feature_relationships.ipynb
 │   ├── 05_feature_redundancy.ipynb
-│   └── supplementary/
-│       ├── time_series.ipynb
-│       ├── text_analysis.ipynb
-│       ├── image_analysis.ipynb
-│       └── numpy_experiments.ipynb
-├── src/                      # Only as reusable functions emerge
-├── reports/                  # Figures and evidence-based final findings
-├── requirements.txt
-├── .gitignore
+│   └── supplementary/{time_series,text_analysis,image_analysis,numpy_experiments}.ipynb
+├── src/                              # Add only when reusable code emerges
+├── reports/
 ├── README.md
-└── ROADMAP.md
+├── ROADMAP.md
+├── requirements.txt
+└── .gitignore
 ```
 
-## Progress review cadence
-
-After each completed milestone, update this file's checkpoint, completed items, results, issues and next exercise. This roadmap is the durable source of truth if a new chat does not recover the full previous context.
+After correcting known notebook issues and completing the current milestone: **restart kernel, Run All, inspect saved outputs, commit with meaningful message, and push**. GitHub state was not verified in this audit; statuses are based on uploaded notebooks only.
